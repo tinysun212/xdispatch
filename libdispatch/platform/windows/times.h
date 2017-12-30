@@ -5,18 +5,23 @@
 #include <time.h>
 
 // some date functions
+#ifndef _TIMEZONE_DEFINED
+#define _TIMEZONE_DEFINED
 struct timezone
 {
   int  tz_minuteswest; /* minutes W of Greenwich */
   int  tz_dsttime;     /* type of dst correction */
 };
+#endif //_TIMEZONE_DEFINED
 
 // quick workaround in case this is included after event.h
 #ifndef _SYS_EVENT_H_
+#ifndef _WIN32
 struct timespec {
     long tv_sec; /* seconds */
     long tv_nsec; /* nanoseconds */
 }; 
+#endif //_WIN32
 #endif
 
 #if defined(_MSC_VER) || defined(_MSC_EXTENSIONS)

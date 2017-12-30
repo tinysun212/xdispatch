@@ -8,11 +8,13 @@
 # pragma warning(disable : 4996)
 #endif
 
+#ifndef _WIN32_WINNT
 #ifdef PROVIDE_LEGACY_XP_SUPPORT
 # define _WIN32_WINNT 0x0500
 #else
 # define _WIN32_WINNT 0x0610
 #endif
+#endif //_WIN32_WINNT
 #define WIN32_LEAN_AND_MEAN
 
 #ifndef __MSVCRT_VERSION__

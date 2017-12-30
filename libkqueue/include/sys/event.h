@@ -176,11 +176,6 @@ extern "C" {
 
 #ifdef _WIN32
 
-struct timespec {
-    time_t  tv_sec;
-    long    tv_nsec;
-};
-
 __declspec(dllexport) int
 kqueue(void);
 
@@ -190,8 +185,10 @@ kevent(int kq, const struct kevent *changelist, int nchanges,
 	    const struct timespec *timeout);
 
 #ifdef MAKE_STATIC
-__declspec(dllexport) int
+__declspec(dllexport) void
 libkqueue_init();
+void     libkqueue_thread_attach();
+void     libkqueue_thread_detach();
 #endif
 
 #else

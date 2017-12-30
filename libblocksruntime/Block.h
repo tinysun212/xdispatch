@@ -26,10 +26,19 @@
 #define _BLOCK_H_
 
 #if !defined(BLOCK_EXPORT)
-#   if defined(__cplusplus)
-#       define BLOCK_EXPORT extern "C" 
+#   ifdef _WIN32
+#       define BLOCK_DLL_STORAGE __declspec(dllimport)
 #   else
-#       define BLOCK_EXPORT extern
+#       define BLOCK_DLL_STORAGE 
+#   endif
+#   if defined(__cplusplus)
+#       define BLOCK_EXPORT extern "C" BLOCK_DLL_STORAGE
+#   else
+#       ifdef _WIN32
+#           define BLOCK_EXPORT BLOCK_DLL_STORAGE
+#       else
+#           define BLOCK_EXPORT extern
+#       endif
 #   endif
 #endif
 

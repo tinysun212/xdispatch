@@ -56,7 +56,8 @@ static __inline bool OSAtomicCompareAndSwapLong(long oldl, long newl, long volat
 
 static __inline bool OSAtomicCompareAndSwapInt(int oldi, int newi, int volatile *dst) {
     /* fixme barrier is overkill -- see objc-os.h */
-    int original = InterlockedCompareExchange(dst, newi, oldi);
+    /* The size of 'int' and 'long' is same on both Windows 32-bit OS and 64-bit OS. */
+    int original = InterlockedCompareExchange((long volatile *)dst, newi, oldi);
     return (original == oldi);
 }
 
@@ -456,7 +457,7 @@ void *_Block_copy(const void *arg) {
 
 
 // API entry point to release a copied Block
-void _Block_release(void *arg) {
+void _Block_release(const void *arg) {
     struct Block_layout *aBlock = (struct Block_layout *)arg;
     int32_t newCount;
     if (!aBlock) return;

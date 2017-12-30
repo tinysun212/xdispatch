@@ -22,7 +22,11 @@ project(BlocksRuntime)
 set(HEADERS Block.h Block_private.h)
 set(SRC runtime.c data.c)
 
-mz_add_flag(CLANG -DBlocksRuntime_EXPORTS -fPIC -std=c99 -Wall -Wextra -W -pedantic -Wno-unused-parameter -Wno-unused-function)
+if(MINGW)
+    mz_add_flag(CLANG -DBlocksRuntime_EXPORTS -std=c99 -Wall -Wextra -W -pedantic -Wno-unused-parameter -Wno-unused-function)
+else()
+    mz_add_flag(CLANG -DBlocksRuntime_EXPORTS -fPIC -std=c99 -Wall -Wextra -W -pedantic -Wno-unused-parameter -Wno-unused-function)
+endif()
 
 OPTION(STATIC_BLOCKSRUNTIME "Enable to build libBlocksRuntime as static library" OFF)
 if(STATIC_BLOCKSRUNTIME)

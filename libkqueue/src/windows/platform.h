@@ -18,8 +18,10 @@
 #define  _KQUEUE_WINDOWS_PLATFORM_H
 
 /* Require Windows XP or later */
-#define WINVER 0x0501
+//#define WINVER 0x0501
+#ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0501
+#endif
 
 /* Reduces build time by omitting extra system headers */
 #define WIN32_LEAN_AND_MEAN
@@ -129,7 +131,10 @@ typedef int nlink_t;
 typedef int timer_t;
 typedef int pthread_t;
 typedef int sigset_t;
+#ifndef _PID_T_
+#define _PID_T_
 typedef int pid_t;
+#endif //_PID_T_
 
 #ifndef __GNUC__
 // unfortunately broken prior to MS Vista, so we need to work around 

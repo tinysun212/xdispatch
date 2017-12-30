@@ -26,14 +26,23 @@
 #define _BLOCK_PRIVATE_H_
 
 #if !defined(BLOCK_EXPORT)
-#   if defined(__cplusplus)
-#       define BLOCK_EXPORT extern "C" 
+#   ifdef _WIN32
+#       define BLOCK_DLL_STORAGE __declspec(dllexport)
 #   else
-#       define BLOCK_EXPORT extern
+#       define BLOCK_DLL_STORAGE 
+#   endif
+#   if defined(__cplusplus)
+#       define BLOCK_EXPORT extern "C" BLOCK_DLL_STORAGE
+#   else
+#       ifdef _WIN32
+#           define BLOCK_EXPORT BLOCK_DLL_STORAGE
+#       else
+#           define BLOCK_EXPORT extern
+#       endif
 #   endif
 #endif
 
-#ifndef _MSC_VER
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
 #include <stdbool.h>
 #else
 /* MSVC doesn't have <stdbool.h>. Compensate. */
@@ -169,6 +178,15 @@ struct Block_basic {
     void (*Block_dispose)(void *);             /* iff BLOCK_HAS_COPY_DISPOSE */
     /* long params[0];  // where const imports, __block storage references, etc. get laid down */
 };
+
+/* Create a heap based copy of a Block or simply add a reference to an existing one.
+ * This must be paired with Block_release to recover memory, even when running
+ * under Objective-C Garbage Collection.
+ */
+BLOCK_EXPORT void *_Block_copy(const void *aBlock);
+
+/* Lose the reference, and if heap based and last reference, recover the memory. */
+BLOCK_EXPORT void _Block_release(const void *aBlock);
 
 
 #if defined(__cplusplus)

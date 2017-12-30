@@ -72,7 +72,8 @@ extern unsigned int PWQ_SPIN_THREADS;
 /* A limit of the number of cpu:s that we view as available, useful when e.g. using processor sets */
 extern unsigned int PWQ_ACTIVE_CPU;
 
-#if __GNUC__
+// In LLP64 Systems (mainly Windows 64-bit), the long type has insufficient size for containing a pointer type. 
+#if __GNUC__ && !defined(_WIN64)
 #define fastpath(x)     ((__typeof__(x))__builtin_expect((long)(x), ~0l))
 #define slowpath(x)     ((__typeof__(x))__builtin_expect((long)(x), 0l))
 #else
@@ -88,7 +89,7 @@ extern unsigned int PWQ_ACTIVE_CPU;
  rep/nop / 0xf3+0x90 are the same as the symbolic 'pause' instruction
  */
 
-#if defined(__i386__) || defined(__x86_64__) || defined(__i386) || defined(__amd64)
+#if defined(__i386__) || defined(__x86_64__) || defined(__i386) || defined(__amd64) || defined(_M_IX86) || defined(_M_AMD64)
 
 #if defined(__SUNPRO_CC)
 

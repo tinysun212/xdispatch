@@ -14,7 +14,16 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#include <inttypes.h>
 #include "../common/private.h"
+
+#ifndef _TIMESPEC_DEFINED
+#define _TIMESPEC_DEFINED
+struct timespec {
+    time_t  tv_sec;
+    long    tv_nsec;
+};
+#endif //_TIMESPEC_DEFINED
 
 struct event_buf {
     DWORD       bytes;
@@ -260,7 +269,7 @@ windows_get_descriptor_type(struct knote *kn)
      * Test if the descriptor is a socket.
      */
     if (fstat( (int)kn->kev.ident, &sb) == 0) {
-        dbg_printf("HANDLE %d appears to a be regular file", kn->kev.ident);
+        dbg_printf("HANDLE %" PRIdPTR " appears to a be regular file", kn->kev.ident);
         kn->kn_flags |= KNFL_REGULAR_FILE;
     } else {
         /* Assume that the HANDLE is a socket. */

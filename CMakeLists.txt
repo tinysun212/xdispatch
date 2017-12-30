@@ -51,7 +51,14 @@ if(MZ_IS_CLANG AND NOT APPLE)
         SRC libblocksruntime libblocksruntime BlocksRuntime
     )
 
-    mz_add_flag(CLANG -fblocks)
+	# Add -fblocks if clang-cl
+	get_filename_component(COMPILER_NAME "${CMAKE_C_COMPILER}" NAME_WE)
+	if("${COMPILER_NAME}" STREQUAL  "clang-cl")
+		mz_add_flag(CLANG -Xclang -fblocks) 
+	else()
+		mz_add_flag(CLANG -fblocks)
+	endif()
+
     set(LIBS ${LIBS} BlocksRuntime)
 endif()
 
