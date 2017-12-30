@@ -1,0 +1,8 @@
+; dlltool -d blockrun.def -l BlocksRuntime.lib
+LIBRARY BlocksRuntime.dll
+EXPORTS
+_NSConcreteWeakBlockVariable
+_NSConcreteGlobalBlock
+_NSConcreteStackBlock
+_Block_release
+_Block_copy

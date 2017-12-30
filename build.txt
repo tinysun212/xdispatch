@@ -1,0 +1,63 @@
+
+1. Linux
+
+	1) Build
+		cd linux_build
+		cmake -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ ../xdispatch
+		ninja
+		
+	2) Compiling Application
+		cd sample
+		clang++ -fblocks -I ../include TestDispatchMainQAsync.cpp -o TestDispatchMainQAsync_linux -L ../lib/linux -ldispatch -lBlocksRuntime
+		
+	3) Run
+		export LD_LIBRARY_PATH=../lib/linux
+		./TestDispatchMainQAsync_linux
+
+2. MinGW-w64
+
+	1) Build
+		cd mingw_build
+		cmake -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DFORCE_OWN_LIBDISPATCH=ON -DFORCE_OWN_LIBKQUEUE=ON -DFORCE_OWN_LIBPTHREAD_WORKQUEUE=ON ../xdispatch
+		ninja
+
+	2) Compiling Application
+		cd sample
+		clang++ -fblocks -I ../include TestDispatchMainQAsync.cpp -o TestDispatchMainQAsync_mingw.exe -L ../lib/mingw -ldispatch.dll -lBlocksRuntime.dll
+		g++ -I ../include TestDispatchMainQAsync.cpp -o TestDispatchMainQAsync_mingw.exe -L ../lib/mingw -ldispatch.dll
+		
+	3) Run
+		cd lib/mingw
+		../../sample/TestDispatchMainQAsync_mingw
+
+3. VS2015 x64 Native Tools + ClangC2, Ninja (Add path)
+
+	1) Copy clang-cl, clang++
+		cd C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\ClangC2\bin\amd64
+		copy clang.exe clang-cl.exe
+		copy clang.exe "clang++.exe"
+	
+	2) Build
+		cd msvc_build
+		cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=clang-cl -DCMAKE_CXX_COMPILER=clang-cl ../xdispatch
+		ninja
+		
+		cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=clang-cl -DCMAKE_CXX_COMPILER=clang-cl ../xdispatch
+		msbuild xdispatch.sln
+
+		// Build library
+		cd bin; lib /def:../../BlocksRuntime.def /out:BlocksRuntime.lib /machine:x64
+
+	3) Compiling Application
+		cd sample
+		clang-cl -Xclang -fblocks -I ..\include TestDispatchMainQAsync.cpp -o TestDispatchMainQAsync_msvc.exe /link /libpath:..\lib\msvc dispatch.lib BlocksRuntime.lib
+		
+		cl /EHsc -I ..\include TestDispatchMainQAsync.cpp /Fe:TestDispatchMainQAsync_msvc.exe /link /libpath:..\lib\msvc dispatch.lib 
+		
+		clang++ -fblocks -I ..\include TestDispatchMainQAsync.cpp -o TestDispatchMainQAsync_msvc.exe -Xlinker -LIBPATH:..\lib\msvc  -ldispatch -lBlocksRuntime
+		
+		// -Xclang -flto-visibility-public-std for clang 5.0.0?
+		
+	4) Run
+		cd lib\msvc
+		..\..\sample\TestDispatchMainQAsync_msvc
