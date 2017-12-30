@@ -380,7 +380,8 @@ if( (NOT MZ_IS_CLANG) AND MZ_COMPILER_VERSION STRGREATER "47")
 endif()
 
 # compiler flags
-mz_add_flag(GCC -Wall -Werror -Wno-unused-function)
+#mz_add_flag(GCC -Wall -Werror -Wno-unused-function)
+mz_add_flag(GCC -Wall -Wno-unused-function)
 if(WINDOWS)
     mz_add_definition(WIN32=1 WINDOWS=1)
 elseif(IOS)

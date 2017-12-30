@@ -135,7 +135,7 @@ else()
 endif()
 
 # the xdispatch target
-mz_add_library(xdispatch libxdispatch)
+#mz_add_library(xdispatch libxdispatch)
 
 
 # Qt Extension if Qt is available

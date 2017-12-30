@@ -30,7 +30,8 @@ if(UNIX)
         user.c
     )
     mz_add_c_flag(GCC
-        -g -O0 -Wall -Werror
+#        -g -O0 -Wall -Werror
+        -g -O0 -Wall 
     )
 else()
     set(SRC

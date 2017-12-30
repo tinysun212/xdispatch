@@ -89,7 +89,8 @@ else()
         include
     )
     mz_add_c_flag(GCC
-        -Wall -Werror -Wextra -Wno-missing-field-initializers -g -O2
+#        -Wall -Werror -Wextra -Wno-missing-field-initializers -g -O2
+        -Wall -Wextra -Wno-missing-field-initializers -g -O2
         -fpic
         -D_XOPEN_SOURCE=600
         -std=c99
